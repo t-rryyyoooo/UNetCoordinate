@@ -1,0 +1,12 @@
+{
+    "data_directory" : "/mnt/data/Abdomen",
+    "image_name" : "imaging.nii.gz",
+    "save_directory" : "/mnt/data/Abdomen",
+    "save_name" : "imaging_-110_250.mha",
+    "min_value" : -110, 
+    "max_value" : 250,
+    "num_array" : ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29"],
+    "log_file" : "fail/setWindowSize.txt",
+    "gpu_id" : 0
+}
+

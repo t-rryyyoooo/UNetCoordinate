@@ -1,0 +1,65 @@
+{
+    "run_training" : {
+        "fold1" : true,
+        "fold2" : true,
+        "fold3" : true
+    },
+    "run_segmentation" : {
+        "fold1" : true,
+        "fold2" : true,
+        "fold3" : true
+        },
+    "run_caluculation" : {
+        "fold1" : true,
+        "fold2" : true,
+        "fold3" : true
+    },
+
+	"dataset_path" : "/sandisk/data/patch/Abdomen/no_pad/132-132-116-1/original/mask/mha",
+	"model_savepath" : "/sandisk/data/modelweight/Abdomen/no_pad/132-132-116-1/original/mask",
+	"train_lists" : {
+        "fold1" : "10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29",
+        "fold2" : "00 01 02 03 04 05 06 07 08 09 20 21 22 23 24 25 26 27 28 29",
+        "fold3" : "00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19"
+    },
+    "val_lists" : {
+        "fold1" : "00 01 02 03 04 05 06 07 08 09",
+        "fold2" : "10 11 12 13 14 15 16 17 18 19",
+        "fold3" : "20 21 22 23 24 25 26 27 28 29"
+    },
+    "test_lists" : {
+        "fold1" : "00 01 02 03 04 05 06 07 08 09",
+        "fold2" : "10 11 12 13 14 15 16 17 18 19",
+        "fold3" : "20 21 22 23 24 25 26 27 28 29"
+    },
+    "module_name" : "UNet_no_pad",
+    "system_name" : "UNetSystem",
+    "checkpoint_name" : "BestAndLatestModelCheckpoint",
+	"log" : "/sandisk/data/log/Abdomen/no_pad/132-132-116-1/original/mask",
+	"in_channel" : 1, 
+	"num_class" : 14,
+	"learning_rate" : 0.001,
+	"batch_size" : 2,
+	"dropout": 0.7,
+	"num_workers" : 6,
+	"epoch" : 50,
+	"gpu_ids" : 0, 
+	"api_key" : "IowbTppLPOohqhcDtzxw76Cot",
+	"project_name" : "abdomen",
+	"experiment_name" : "no_pad-132-132-116-1-original",
+
+
+  "data_directory" : "/mnt/data/Abdomen",
+  "model_name" : "latest.pkl",
+  "image_patch_size" : "132-132-116",
+  "label_patch_size" : "44-44-28",
+  "overlap" : 1,
+  "image_name" : "imaging.nii.gz",
+  "mask_name" : "No",
+  "save_name" : "label.mha",
+
+  "csv_savedir" : "/sandisk/data/result/Abdomen/no_pad/132-132-116-1/original/mask", 
+  "class_label" : "backGound spleen  rightKidney  leftKidney gallbladder esophagus liver stomach aorta inferiorVenaCava portalVeinAndSplenicVein pancreas rightAdrenalGland leftAdrenalGland",
+  "true_name" : "segmentation.nii.gz",
+  "predict_name" : "label.mha" 
+}

@@ -1,0 +1,15 @@
+{
+    "data_directory" : "$HOME/Desktop/data/Abdomen",
+    "weight" : "$HOME/Desktop/data/modelweight/Abdomen/with_pad/28-44-44-1/mask/fold2/latest.pkl",
+    "save_directory" : "$HOME/Desktop/data/patch/Abdomen/with_pad/28-44-44-1/mask/segmentation", 
+    "image_patch_size" : "28-44-44",
+    "label_patch_size" : "28-44-44",
+    "overlap" : 1,
+    "image_name" : "imaging.nii.gz",
+    "mask_name" : "mask.mha",
+    "save_name" : "label.mha",
+    "num_array" : ["10", "11", "12", "13", "14", "15", "16", "17", "18", "19"],
+    "log_file" : "fail/segmentation.txt",
+    "gpu_id" : 0
+}
+

@@ -1,0 +1,15 @@
+{
+    "true_directory" : "/mnt/data/Abdomen", 
+    "predict_directory" : "/sandisk/data/patch/Abdomen/with_pad/512-512-32-1/resampled/rep_2/mask/segmentation", 
+    "save_path" : "$HOME/Desktop/data/result/Abdomen/test/DICE.csv",
+    "patientID_list" : "01 02 03 04 05 06 07 08 09 ",
+    "classes" : 14, 
+    "class_label" : "0 1 2 3 4 5 6 7 8 9 10 11 12 13",
+    "true_name" : "segmentation_resampled.nii.gz",
+    "predict_name" : "label.mha"
+}
+
+
+
+
+
