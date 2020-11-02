@@ -16,7 +16,7 @@ def ParseArgs():
     parser.add_argument("--mask_path", help="$HOME/Desktop/data/kits19/case_00000/label.mha")
     parser.add_argument("--image_patch_size", help="48-48-16", default="48-48-16")
     parser.add_argument("--label_patch_size", help="48-48-16", default="48-48-16")
-    parser.add_argument("--overlap", help="1", type=int)
+    parser.add_argument("--overlap", help="1", type=int, default=1)
 
     args = parser.parse_args()
     return args
@@ -54,10 +54,18 @@ def main(args):
             image_patch_size = image_patch_size, 
             label_patch_size = label_patch_size, 
             overlap = args.overlap, 
-            phase="train"
             )
 
     extractor.execute()
+    """
+    il, ll = extractor.output(kind="Array")
+    p = extractor.restore(ll)
+    pa = sitk.GetArrayFromImage(p)
+    la = sitk.GetArrayFromImage(label)
+    from functions import DICE
+    dice = DICE(la, pa)
+    print(dice)
+    """
     extractor.save(args.save_slice_path)
 
 
