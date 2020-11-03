@@ -2,7 +2,7 @@
 
 # Input 
 readonly INPUT_DIRECTORY="input"
-echo -n "Is json file name extractImage.json?[y/n]:"
+echo -n "Is json file name extractImageAndCoordinate.json?[y/n]:"
 read which
 while [ ! $which = "y" -a ! $which = "n" ]
 do
@@ -12,7 +12,7 @@ done
 
 # Specify json file.
 if [ $which = "y" ];then
- JSON_NAME="extractImage.json"
+ JSON_NAME="extractImageAndCoordinate.json"
 else
  echo -n "JSON_FILE_NAME="
  read JSON_NAME
@@ -44,17 +44,24 @@ do
  data="${DATA_DIRECTORY}/case_${number}"
  image="${data}/${IMAGE_NAME}"
  label="${data}/${LABEL_NAME}"
- mask="${data}/${MASK_NAME}"
  save="${SAVE_DIRECTORY}/case_${number}"
 
  echo "Image:${image}"
  echo "Label:${label}"
- echo "Mask:${mask}"
  echo "Save:${save}"
  echo "IMAGE_PATCH_SIZE:${IMAGE_PATCH_SIZE}"
  echo "LABEL_PATCH_SIZE:${LABEL_PATCH_SIZE}"
 
- python3 extractImage.py ${image} ${label} ${save} --mask_path ${mask} --image_patch_size ${IMAGE_PATCH_SIZE} --label_patch_size ${LABEL_PATCH_SIZE} --overlap ${OVERLAP}
+ if [ $MASK_NAME = "No" ];then
+  echo "Mask:${MASK_PATH}"
+  mask=""
+ else
+  mask_path="${data}/${MASK_NAME}"
+  echo "Mask:${mask_path}"
+  mask="--mask_path ${mask_path}"
+ fi
+
+ python3 extractImageAndCoordinate.py ${image} ${label} ${save} --image_patch_size ${IMAGE_PATCH_SIZE} --label_patch_size ${LABEL_PATCH_SIZE} --overlap ${OVERLAP} ${mask}
 
  # Judge if it works.
  if [ $? -eq 0 ]; then

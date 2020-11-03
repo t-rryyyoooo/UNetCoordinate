@@ -4,6 +4,16 @@ import SimpleITK as sitk
 import tensorflow as tf
 import matplotlib.pyplot as plt
 from decimal import Decimal, ROUND_HALF_UP
+import re
+
+def getSizeFromString(string, digit=3):
+    matchobj = re.match("([0-9]+)-" * (digit - 1) + "([0-9]+)", string)
+    if matchobj is None:
+        print("[ERROR] Invalid size : {}.".format(string))
+
+    size = np.array([int(s) for s in matchobj.groups()])
+    return size
+
 
 def setWindowSize(image_array, min_value=-110, max_value=250):
     image_array = np.where(image_array < min_value, min_value, image_array)
