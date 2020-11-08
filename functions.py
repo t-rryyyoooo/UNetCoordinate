@@ -53,13 +53,51 @@ def getImageWithMeta(imageArray, refImage, spacing=None, origin=None, direction=
 
     return image
 
+
+def croppingForNumpy(image_array, lower_crop_size, upper_crop_size):
+    assert image_array.ndim == len(lower_crop_size) == len(upper_crop_size)
+    
+    slices = []
+    for lower, upper, size in zip(lower_crop_size, upper_crop_size, image_array.shape):
+        slices.append(slice(lower, size - upper))
+        
+    slices = tuple(slices)
+    
+    cropped_image_array = image_array[slices]
+    
+    return cropped_image_array
+
 def cropping(image, lower_crop_size, upper_crop_size):
     crop_filter = sitk.CropImageFilter()
     crop_filter.SetLowerBoundaryCropSize(lower_crop_size)
     crop_filter.SetUpperBoundaryCropSize(upper_crop_size)
     cropped_image = crop_filter.Execute(image)
+    cropped_image.SetOrigin(image.GetOrigin())
 
     return cropped_image
+
+def paddingForNumpy(image_array, lower_pad_size, upper_pad_size, mirroring=False):
+    assert image_array.ndim == len(lower_pad_size) == len(upper_pad_size)
+    
+    pad_width = []
+    for lower, upper in zip(lower_pad_size, upper_pad_size):
+        pad_width.append((lower, upper))
+
+    if mirroring:
+        mode = "symmetric"
+        constant_values = None
+    else:
+        mode = "constant"
+        constant_values = image_array.min()
+
+    padded_image_array = np.pad(
+            image_array, 
+            pad_width = pad_width,
+            mode=mode, 
+            constant_values=constant_values
+            )
+
+    return padded_image_array
 
 def padding(image, lower_pad_size, upper_pad_size, mirroring = False):
     pad_filter = sitk.MirrorPadImageFilter() if mirroring else sitk.ConstantPadImageFilter()
@@ -72,8 +110,21 @@ def padding(image, lower_pad_size, upper_pad_size, mirroring = False):
     pad_filter.SetPadLowerBound(lower_pad_size)
     pad_filter.SetPadUpperBound(upper_pad_size)
     padded_image = pad_filter.Execute(image)
+    padded_image.SetOrigin(image.GetOrigin())
 
     return padded_image
+
+def clippingForNumpy(image_array, lower_clip_indices, upper_clip_indices):
+    slices = []
+    for lower, upper in zip(lower_clip_indices, upper_clip_indices):
+        s = slice(lower, upper)
+        slices.append(s)
+
+    slices = tuple(slices)
+
+    clipped_image_array = image_array[slices]
+
+    return clipped_image_array
 
 def clipping(image, lower_clip_index, upper_clip_index):
     z_slice = slice(lower_clip_index[0], upper_clip_index[0])
@@ -81,6 +132,7 @@ def clipping(image, lower_clip_index, upper_clip_index):
     x_slice = slice(lower_clip_index[2], upper_clip_index[2])
 
     clipped_image = image[z_slice, y_slice, x_slice]
+    clipped_image.SetOrigin(image.GetOrigin())
 
     return clipped_image
 

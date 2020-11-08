@@ -11,8 +11,8 @@ def ParseArgs():
     parser.add_argument("label_path", help="$HOME/Desktop/data/kits19/case_00000/segmentation.nii.gz")
     parser.add_argument("save_path", help="$HOME/Desktop/data/slice/hist_0.0/case_00000", default=None)
     parser.add_argument("--mask_path", help="$HOME/Desktop/data/kits19/case_00000/label.mha")
-    parser.add_argument("--image_patch_size", help="48-48-16", default="48-48-16")
-    parser.add_argument("--label_patch_size", help="48-48-16", default="48-48-16")
+    parser.add_argument("--image_patch_size", help="48-48-16", default="16-48-48")
+    parser.add_argument("--label_patch_size", help="48-48-16", default="16-48-48")
     parser.add_argument("--overlap", help="1", type=int, default=1)
 
     args = parser.parse_args()
@@ -36,8 +36,8 @@ def main(args):
             label = label,
             center = (0, 0, 0),
             mask = mask,
-            image_patch_size = image_patch_size,
-            label_patch_size = label_patch_size,
+            image_array_patch_size = image_patch_size,
+            label_array_patch_size = label_patch_size,
             overlap = args.overlap
             )
 
@@ -45,14 +45,15 @@ def main(args):
     iace.save(args.save_path)
 
     """
-    il, ll = extractor.output(kind="Array")
-    p = extractor.restore(ll)
+    il, ll, cl = iace.output()
+    p = iace.restore(ll)
     pa = sitk.GetArrayFromImage(p)
     la = sitk.GetArrayFromImage(label)
     from functions import DICE
     dice = DICE(la, pa)
     print(dice)
     """
+
 if __name__ == '__main__':
     args = ParseArgs()
     main(args)
