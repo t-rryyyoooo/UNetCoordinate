@@ -38,7 +38,8 @@ def main(args):
             mask = mask,
             image_array_patch_size = image_patch_size,
             label_array_patch_size = label_patch_size,
-            overlap = args.overlap
+            overlap = args.overlap,
+            integrate = True
             )
 
     iace.execute()

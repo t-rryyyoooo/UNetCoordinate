@@ -1,9 +1,10 @@
 import SimpleITK as sitk
+import sys
 import numpy as np
 import argparse
 from functions import createParentPath, getImageWithMeta
 from pathlib import Path
-from extractor import extractor as extor
+from imageAndCoordinateExtractor import ImageAndCoordinateExtractor
 from tqdm import tqdm
 import torch
 import cloudpickle
@@ -26,6 +27,7 @@ def ParseArgs():
     return args
 
 def main(args):
+    sys.path.append("..")
     use_cuda = torch.cuda.is_available() and True
     device = torch.device("cuda" if use_cuda else "cpu")
     """ Slice module. """
@@ -58,18 +60,18 @@ def main(args):
     label_patch_size = [int(s) for s in matchobj.groups()]
 
     
-    extractor = extor(
+    iace = ImageAndCoordinateExtractor(
             image = image, 
             label = label, 
             mask = mask,
-            image_patch_size = image_patch_size, 
-            label_patch_size = label_patch_size, 
+            image_array_patch_size = image_patch_size, 
+            label_array_patch_size = label_patch_size, 
             overlap = args.overlap, 
-            phase = "segmentation"
+            integrate = True
             )
 
-    extractor.execute()
-    image_array_list, mask_array_list  = extractor.output("Array")
+    iace.execute()
+    image_array_list, _ = iace.output()
 
     """ Load model. """
 
@@ -82,13 +84,13 @@ def main(args):
     """ Segmentation module. """
 
     segmented_array_list = []
-    for image_array, mask_array in tqdm(zip(image_array_list, mask_array_list), desc="Segmenting images...", ncols=60):
-        if args.mask_path is not None and (mask_array == 0).all():
-            segmented_array_list.append(mask_array)
-            continue
+    for image_array in tqdm(image_array_list, desc="Segmenting images...", ncols=60):
 
         #image_array = image_array.transpose(2, 0, 1)
-        image_array = torch.from_numpy(image_array[np.newaxis, np.newaxis, ...]).to(device, dtype=torch.float)
+        while image_array.ndim < 5:
+            image_array = image_array[np.newaxis, ...]
+
+        image_array = torch.from_numpy(image_array).to(device, dtype=torch.float)
 
         segmented_array = model(image_array)
         segmented_array = segmented_array.to("cpu").detach().numpy().astype(np.float)
@@ -99,7 +101,7 @@ def main(args):
         segmented_array_list.append(segmented_array)
 
     """ Restore module. """
-    segmented = extractor.restore(segmented_array_list)
+    segmented = iace.restore(segmented_array_list)
 
     createParentPath(args.save_path)
     print("Saving image to {}".format(args.save_path))
