@@ -71,6 +71,7 @@ def main(args):
             )
 
     iace.execute()
+    image_array_list, _ = iace.output()
 
     """ Load model. """
 
@@ -83,7 +84,7 @@ def main(args):
     """ Segmentation module. """
 
     segmented_array_list = []
-    for image_array, _ in tqdm(iace.loadData(), desc="Segmenting images...", ncols=60):
+    for image_array in tqdm(image_array_list, desc="Segmenting images...", ncols=60):
 
         #image_array = image_array.transpose(2, 0, 1)
         while image_array.ndim < 5:

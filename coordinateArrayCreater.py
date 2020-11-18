@@ -29,10 +29,11 @@ class CoordinateArrayCreater():
 
 
 def main():
-    image = sitk.ReadImage("/Users/tanimotoryou/Documents/lab/imageData/Abdomen/case_00/imaging_resampled.nii.gz")
+    image = sitk.ReadImage("/home/vmlab/Desktop/data/Abdomen/case_00/imaging_resampled.nii.gz")
     image_array = sitk.GetArrayFromImage(image)
+    image_array = np.array([[0, 1, 2], [3, 4, 5]])
 
-    cac = CoordinateArrayCreater(image_array, (1, 2, 3))
+    cac = CoordinateArrayCreater(image_array, center=(0,0))
     cac.execute()
 
 if __name__ == "__main__":
