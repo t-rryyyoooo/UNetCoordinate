@@ -166,6 +166,7 @@ do
  fi
 done
 
+CSV_SAVEPATH="${CSV_SAVEDIR}/${csv_name}.csv"
 echo "---------- Caluculation ----------"
 echo "TRUE_DIRECTORY:${DATA_DIRECTORY}"
 echo "PREDICT_DIRECTORY:${save_directory}"
